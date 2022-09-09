@@ -37,6 +37,7 @@ export const loginAction = (data) => {
     data,
   };
 };
+
 export const logoutAction = {
   type: LOG_OUT,
 };
