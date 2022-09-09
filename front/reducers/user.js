@@ -7,7 +7,9 @@ const dummyUser = {
 };
 
 export const initialState = {
+  isLoggingIn: false, // 로그인 시도 중
   isLoggedIn: false,
+  isLoggingOut: false, // 로그아웃 시도 중
   me: null,
   signUpData: {},
   loginData: {},
@@ -15,10 +17,12 @@ export const initialState = {
 
 export const SIGN_UP = "SIGN_UP";
 export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
-export const LOG_IN = "LOG_IN"; // 액션의 이름
+export const LOG_IN_REQUEST = "LOG_IN_REQUEST"; // 액션의 이름
 export const LOG_IN_SUCCESS = "LOG_IN_SUCCESS"; // 액션의 이름
 export const LOG_IN_FAILURE = "LOG_IN_FAILURE"; // 액션의 이름
-export const LOG_OUT = "LOG_OUT";
+export const LOG_OUT_REQUEST = "LOG_OUT_REQUEST";
+export const LOG_OUT_SUCCESS = "LOG_OUT_SUCCESS";
+export const LOG_OUT_FAILURE = "LOG_OUT_FAILURE";
 
 export const signUpAction = (data) => {
   return {
@@ -31,16 +35,19 @@ export const signUpSuccess = {
   type: SIGN_UP_SUCCESS,
 };
 
-export const loginAction = (data) => {
+export const loginRequestAction = (data) => {
   return {
-    type: LOG_IN,
+    type: LOG_IN_REQUEST,
     data,
   };
 };
 
-export const logoutAction = {
-  type: LOG_OUT,
+export const logoutRequestAction = () => {
+  return {
+    type: LOG_OUT_REQUEST,
+  };
 };
+
 export const signUp = (data) => {
   return {
     type: SIGN_UP,
@@ -50,18 +57,45 @@ export const signUp = (data) => {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case LOG_IN: {
+    case LOG_IN_REQUEST: {
       return {
         ...state,
-        isLoggedIn: true,
-        me: action.data,
+        isLogginIn: true,
       };
     }
-    case LOG_OUT: {
+    case LOG_IN_SUCCESS: {
       return {
         ...state,
+        isLoggingIn: false,
+        isLoggedIn: true,
+        me: { ...action.data, nickname: "Junsang" },
+      };
+    }
+    case LOG_IN_FAILURE: {
+      return {
+        ...state,
+        isLoggingIn: false,
+        isLoggedIn: false,
+      };
+    }
+    case LOG_OUT_REQUEST: {
+      return {
+        ...state,
+        isLoggingOut: true,
+      };
+    }
+    case LOG_OUT_SUCCESS: {
+      return {
+        ...state,
+        isLoggingOut: false,
         isLoggedIn: false,
         me: null,
+      };
+    }
+    case LOG_OUT_FAILURE: {
+      return {
+        ...state,
+        isLoggingOut: false,
       };
     }
     case SIGN_UP: {
