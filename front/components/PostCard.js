@@ -8,18 +8,20 @@ import {
   EllipsisOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
+import { REMOVE_POST_REQUEST } from "../reducers/post";
 
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
-import { REMOVE_POST_REQUEST } from "../reducers/post";
+import FollowButton from "./FollowButton";
 
 export default function PostCard({ post }) {
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(false);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
-  const id = useSelector((state) => state.user.me?.id);
+  const { me } = useSelector((state) => state.user);
   const { removePostLoading } = useSelector((state) => state.post);
+  const id = me && me.id;
 
   const onToggleLike = useCallback(() => {
     setLiked((prev) => !prev);
@@ -74,6 +76,7 @@ export default function PostCard({ post }) {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
