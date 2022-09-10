@@ -9,7 +9,7 @@ export default function PostForm() {
   const dispatch = useDispatch();
   const imageInput = useRef();
 
-  const [text, setText, onChangeText] = useInput("");
+  const [text, onChangeText, setText] = useInput("");
   const { imagePaths, addPostDone } = useSelector((state) => state.post);
 
   useEffect(() => {
