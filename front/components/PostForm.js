@@ -10,7 +10,9 @@ export default function PostForm() {
   const imageInput = useRef();
 
   const [text, onChangeText, setText] = useInput("");
-  const { imagePaths, addPostDone } = useSelector((state) => state.post);
+  const { imagePaths, addPostDone, addPostLoading } = useSelector(
+    (state) => state.post
+  );
 
   useEffect(() => {
     if (addPostDone) {
@@ -40,7 +42,12 @@ export default function PostForm() {
       <div>
         <input type="file" multiple hidden ref={imageInput} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <Button type="primary" style={{ float: "right" }} htmlType="submit">
+        <Button
+          type="primary"
+          style={{ float: "right" }}
+          htmlType="submit"
+          loading={addPostLoading}
+        >
           짹짹
         </Button>
       </div>
