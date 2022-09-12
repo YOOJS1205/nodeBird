@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-  // 모델 이름이 자동으로 소문자, 복수형으로 적용이 된다. users
   const Image = sequelize.define(
     "Image",
     {
@@ -10,11 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       charset: "utf8",
-      collate: "utf8_general_ci", // 한글 저장
+      collate: "utf8_general_ci",
     }
   );
-  Image.associate = (db) => {
-    db.Image.belongsTo(db.Post);
-  };
+  Image.associate = (db) => {};
   return Image;
 };

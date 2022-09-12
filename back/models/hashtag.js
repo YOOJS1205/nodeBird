@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-  // 모델 이름이 자동으로 소문자, 복수형으로 적용이 된다. users
   const Hashtag = sequelize.define(
     "Hashtag",
     {
@@ -10,11 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       charset: "utf8mb4",
-      collate: "utf8mb4_general_ci", // 한글 저장
+      collate: "utf8mb4_general_ci",
     }
   );
-  Hashtag.associate = (db) => {
-    db.Hashtag.belongsToMany(db.Post);
-  };
+  Hashtag.associate = (db) => {};
   return Hashtag;
 };
