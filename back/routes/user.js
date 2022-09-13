@@ -1,8 +1,30 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const passport = require("passport");
 const { User } = require("../models"); // db.User
 
 const router = express.Router();
+
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      // server error
+      console.error(err);
+      return next(err);
+    }
+    if (info) {
+      // client error
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, async (loginErr) => {
+      if (loginErr) {
+        console.error(loginErr);
+        return next(loginErr);
+      }
+      return res.json(user);
+    });
+  })(req, res, next);
+});
 
 router.post("/", async (req, res, next) => {
   try {
