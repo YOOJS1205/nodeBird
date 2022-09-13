@@ -21,16 +21,15 @@ import {
 
 // 실제 서버 요청 함수
 function logInAPI(data) {
-  return axios.post("/api/login", data);
+  return axios.post("/user/login", data);
 }
 
 function* logIn(action) {
   try {
-    yield delay(1000);
-    // const result = yield call(logInAPI, action.data);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -41,16 +40,14 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.post("/api/logout");
+  return axios.post("/user/logout");
 }
 
 function* logOut() {
   try {
-    yield delay(1000);
-    // const result = yield call(logOutAPI);
+    yield call(logOutAPI);
     yield put({
       type: LOG_OUT_SUCCESS,
-      //   data: result.data,
     });
   } catch (err) {
     yield put({
@@ -61,7 +58,7 @@ function* logOut() {
 }
 
 function signUpAPI(data) {
-  return axios.post("http://localhost:3065/user", data);
+  return axios.post("/user", data);
 }
 
 function* signUp(action) {
@@ -81,7 +78,7 @@ function* signUp(action) {
 }
 
 // function followAPI(data) {
-//   return axios.post("/api/follow", data);
+//   return axios.post("/follow", data);
 // }
 
 function* follow(action) {
@@ -101,7 +98,7 @@ function* follow(action) {
 }
 
 // function unfollowAPI(data) {
-//   return axios.post("/api/unfollow", data);
+//   return axios.post("/unfollow", data);
 // }
 
 function* unfollow(action) {
