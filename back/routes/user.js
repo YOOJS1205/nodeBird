@@ -2,11 +2,12 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { User } = require("../models"); // db.User
+const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 const db = require("../models");
 
 const router = express.Router();
 
-router.post("/login", (req, res, next) => {
+router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       // server error
@@ -46,13 +47,7 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-router.post("/user/logout", (req, res) => {
-  req.logout();
-  req.session.destroy();
-  res.send("ok");
-});
-
-router.post("/", async (req, res, next) => {
+router.post("/", isNotLoggedIn, async (req, res, next) => {
   try {
     // 이메일 중복 체크
     const exUser = await User.findOne({
@@ -74,6 +69,12 @@ router.post("/", async (req, res, next) => {
     console.log(error);
     next(error); // status 500
   }
+});
+
+router.post("/logout", isLoggedIn, (req, res) => {
+  req.logout(() => {});
+  req.session.destroy();
+  res.send("ok");
 });
 
 module.exports = router;
