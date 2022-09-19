@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateDummyPost, LOAD_POSTS_REQUEST } from "../reducers/post";
+import { LOAD_POSTS_REQUEST } from "../reducers/post";
+import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 
 import AppLayout from "../components/AppLayout";
 import PostForm from "../components/PostForm";
@@ -14,6 +15,9 @@ const Home = () => {
   );
 
   useEffect(() => {
+    dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
     dispatch({
       type: LOAD_POSTS_REQUEST,
     });

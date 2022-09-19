@@ -25,7 +25,7 @@ passportConfig();
 app.use(
   cors({
     origin: true,
-    credentials: false,
+    credentials: true, // 쿠키도 같이 전달
   })
 );
 // req.body를 쓰기 위함
