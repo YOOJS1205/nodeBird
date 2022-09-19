@@ -77,26 +77,6 @@ export const addComment = (data) => ({
   data,
 });
 
-const dummyPost = (data) => ({
-  id: data.id,
-  User: {
-    id: 1,
-    nickname: "제로초",
-  },
-  content: data.content,
-  Images: [],
-  Comments: [],
-});
-
-const dummyComment = (data) => ({
-  id: shortId.generate(),
-  content: data,
-  User: {
-    id: 1,
-    nickname: "제로초",
-  },
-});
-
 export default (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
@@ -123,9 +103,9 @@ export default (state = initialState, action) => {
         draft.addPostError = null;
         break;
       case ADD_POST_SUCCESS: {
-        draft.mainPosts.unshift(dummyPost(action.data));
         draft.addPostLoading = false;
         draft.addPostDone = true;
+        draft.mainPosts.unshift(action.data);
         break;
       }
       case ADD_POST_FAILURE: {
@@ -157,8 +137,8 @@ export default (state = initialState, action) => {
         break;
       }
       case ADD_COMMENT_SUCCESS: {
-        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-        post.Comments.unshift(dummyComment(action.data.content));
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post.Comments.unshift(action.data);
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;
