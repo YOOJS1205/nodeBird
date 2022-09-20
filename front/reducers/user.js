@@ -58,23 +58,6 @@ export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
 export const ADD_POST_TO_ME = "ADD_POST_TO_ME";
 export const REMOVE_POST_OF_ME = "REMOVE_POST_OF_ME";
 
-const dummyUser = (data) => ({
-  ...data,
-  nickname: "Junsang",
-  id: 1,
-  Posts: [{ id: 1 }],
-  Followings: [
-    { nickname: "부기초" },
-    { nickname: "Chanho Lee" },
-    { nickname: "neue zeal" },
-  ],
-  Followers: [
-    { nickname: "부기초" },
-    { nickname: "Chanho Lee" },
-    { nickname: "neue zeal" },
-  ],
-});
-
 export const loginRequestAction = (data) => {
   return {
     type: LOG_IN_REQUEST,
@@ -124,7 +107,7 @@ export default (state = initialState, action) => {
       case FOLLOW_SUCCESS: {
         draft.followLoading = false;
         draft.followDone = true;
-        draft.me.Followings.push({ id: action.data });
+        draft.me.Followings.push({ id: action.data.UserId });
         break;
       }
       case FOLLOW_FAILURE: {
@@ -142,7 +125,7 @@ export default (state = initialState, action) => {
         draft.unfollowLoading = false;
         draft.unfollowDone = true;
         draft.me.Followings = draft.me.Followings.filter(
-          (v) => v.id !== action.data
+          (v) => v.id !== action.data.UserId
         );
         break;
       }
@@ -208,6 +191,7 @@ export default (state = initialState, action) => {
         break;
       }
       case CHANGE_NICKNAME_SUCCESS: {
+        draft.me.nickname = action.data.nickname;
         draft.changeNicknameLoading = false;
         draft.changeNicknameDone = true;
         break;

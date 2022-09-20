@@ -22,23 +22,21 @@ import FollowButton from "./FollowButton";
 export default function PostCard({ post }) {
   const dispatch = useDispatch();
   const [commentFormOpened, setCommentFormOpened] = useState(false);
-  const { me } = useSelector((state) => state.user);
   const { removePostLoading } = useSelector((state) => state.post);
-  const id = me && me.id;
-  const liked = post.Likers.find((v) => v.id === id);
+  const id = useSelector((state) => state.user.me?.id);
 
   const onLike = useCallback(() => {
     dispatch({
       type: LIKE_POST_REQUEST,
       data: post.id,
     });
-  }, []);
+  }, [id]);
   const onUnLike = useCallback(() => {
     dispatch({
       type: UNLIKE_POST_REQUEST,
       data: post.id,
     });
-  }, []);
+  }, [id]);
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev);
   }, []);
@@ -48,7 +46,9 @@ export default function PostCard({ post }) {
       type: REMOVE_POST_REQUEST,
       data: post.id,
     });
-  }, []);
+  }, [id]);
+
+  const liked = post.Likers.find((v) => v.id === id);
   return (
     <div style={{ marginBottom: 20 }}>
       <Card

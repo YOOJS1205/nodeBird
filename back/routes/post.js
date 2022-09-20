@@ -31,7 +31,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
           attributes: ["id", "nickname"],
         },
         {
-          model: User, // 좋아요 누른사람
+          model: User, // 좋아요 누른 사람
           as: "Likers",
           attributes: ["id"],
         },
@@ -113,12 +113,11 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
         UserId: req.user.id,
       },
     });
-    res.json({ PostId: req.params.postId });
+    res.status(200).json({ PostId: parseInt(req.params.postId, 10) });
   } catch (error) {
     console.error(error);
     next(error);
   }
-  res.send({ id: 1 });
 });
 
 module.exports = router;
