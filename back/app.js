@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const path = require("path");
 
 const postRouter = require("./routes/post");
 const postsRouter = require("./routes/posts");
@@ -32,6 +33,8 @@ app.use(
     credentials: true, // 쿠키도 같이 전달
   })
 );
+
+app.use("/", express.static(path.join(__dirname, "uploads")));
 // req.body를 쓰기 위함
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

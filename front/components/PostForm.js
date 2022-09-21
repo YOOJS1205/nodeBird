@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useEffect } from "react";
 import { Form, Input, Button } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 
-import { addPost, UPLOAD_IMAGES_REQUEST } from "../reducers/post";
+import { addPost, UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from "../reducers/post";
 import useInput from "../hooks/useInput";
 
 export default function PostForm() {
@@ -39,6 +39,16 @@ export default function PostForm() {
       data: imageFormData,
     });
   }, []);
+
+  const onRemoveImage = useCallback(
+    (index) => () => {
+      dispatch({
+        type: REMOVE_IMAGE,
+        data: index,
+      });
+    },
+    []
+  );
   return (
     <Form
       style={{ marign: "10px 0 20px" }}
@@ -71,11 +81,15 @@ export default function PostForm() {
         </Button>
       </div>
       <div>
-        {imagePaths.map((v) => (
+        {imagePaths.map((v, i) => (
           <div key={v} style={{ display: "inline-block" }}>
-            <img src={v} style={{ width: "200px" }} alt={v} />
+            <img
+              src={`http://localhost:3065/${v}`}
+              style={{ width: "200px" }}
+              alt={v}
+            />
             <div>
-              <Button>제거</Button>
+              <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>
           </div>
         ))}
