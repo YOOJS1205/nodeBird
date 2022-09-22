@@ -16,7 +16,7 @@ export default function PostImages({ images }) {
       <>
         <img
           role="presentaion"
-          src={images[0].src}
+          src={`http://localhost:3065/${images[0].src}`}
           alt={images[0].src}
           onClick={onZoom}
         />
@@ -30,14 +30,14 @@ export default function PostImages({ images }) {
         <img
           role="presentaion"
           style={{ width: "50%", display: "inline-block" }}
-          src={images[0].src}
+          src={`http://localhost:3065/${images[0].src}`}
           alt={images[0].src}
           onClick={onZoom}
         />
         <img
           role="presentaion"
           style={{ width: "50%", display: "inline-block" }}
-          src={images[1].src}
+          src={`http://localhost:3065/${images[1].src}`}
           alt={images[1].src}
           onClick={onZoom}
         />
@@ -51,7 +51,7 @@ export default function PostImages({ images }) {
         <img
           role="presentaion"
           style={{ width: "50%" }}
-          src={images[0].src}
+          src={`http://localhost:3065/${images[0].src}`}
           alt={images[0].src}
           onClick={onZoom}
         />
