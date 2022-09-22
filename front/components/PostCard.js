@@ -23,16 +23,8 @@ import FollowButton from "./FollowButton";
 export default function PostCard({ post }) {
   const dispatch = useDispatch();
   const [commentFormOpened, setCommentFormOpened] = useState(false);
-  const { removePostLoading, retweetError } = useSelector(
-    (state) => state.post
-  );
+  const { removePostLoading } = useSelector((state) => state.post);
   const id = useSelector((state) => state.user.me?.id);
-
-  // useEffect(() => {
-  //   if (retweetError) {
-  //     alert(retweetError);
-  //   }
-  // }, [retweetError]);
 
   const onLike = useCallback(() => {
     if (!id) {
@@ -117,13 +109,32 @@ export default function PostCard({ post }) {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        title={
+          post.RetweetId ? `${post.User.nickname}님이 리트윗하셨습니다.` : null
+        }
         extra={id && <FollowButton post={post} />}
       >
-        <Card.Meta
-          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          title={post.User.nickname}
-          description={<PostCardContent postData={post.content} />}
-        />
+        {post.RetweetId && post.Retweet ? (
+          <Card
+            cover={
+              post.Retweet.Images[0] && (
+                <PostImages images={post.Retweet.Images} />
+              )
+            }
+          >
+            <Card.Meta
+              avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
+              title={post.Retweet.User.nickname}
+              description={<PostCardContent postData={post.Retweet.content} />}
+            />
+          </Card>
+        ) : (
+          <Card.Meta
+            avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+            title={post.User.nickname}
+            description={<PostCardContent postData={post.content} />}
+          />
+        )}
       </Card>
       {commentFormOpened && (
         <div>
