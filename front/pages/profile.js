@@ -10,19 +10,13 @@ import {
 import AppLayout from "../components/AppLayout";
 import NicknameEditForm from "../components/NicknameEditForm";
 import FollowList from "../components/FollowList";
+import wrapper from "../store/configureStore";
+import { END } from "redux-saga";
+import axios from "axios";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    dispatch({
-      type: LOAD_FOLLOWERS_REQUEST,
-    });
-    dispatch({
-      type: LOAD_FOLLOWINGS_REQUEST,
-    });
-  }, []);
 
   useEffect(() => {
     if (!me) {
@@ -47,5 +41,24 @@ const Profile = () => {
     </>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req }) => {
+      const cookie = req ? req.headers.cookie : "";
+      axios.defaults.headers.Cookie = "";
+      if (req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+      }
+      store.dispatch({
+        type: LOAD_FOLLOWERS_REQUEST,
+      });
+      store.dispatch({
+        type: LOAD_FOLLOWINGS_REQUEST,
+      });
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+    }
+);
 
 export default Profile;

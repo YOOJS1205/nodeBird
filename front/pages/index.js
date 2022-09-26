@@ -8,6 +8,7 @@ import wrapper from "../store/configureStore";
 import AppLayout from "../components/AppLayout";
 import PostForm from "../components/PostForm";
 import PostCard from "../components/PostCard";
+import axios from "axios";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -56,17 +57,22 @@ const Home = () => {
 // 화면을 그리기 전에 서버에서 먼저 실행
 // 데이터를 채우고 화면에 렌더링을 시킬 수 있다.
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async () => {
-    console.log(store);
-    store.dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-    });
-    store.dispatch({
-      type: LOAD_POSTS_REQUEST,
-    });
-    store.dispatch(END);
-    await store.sagaTask.toPromise();
-  }
+  (store) =>
+    async ({ req }) => {
+      const cookie = req ? req.headers.cookie : "";
+      axios.defaults.headers.Cookie = "";
+      if (req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+      }
+      store.dispatch({
+        type: LOAD_MY_INFO_REQUEST,
+      });
+      store.dispatch({
+        type: LOAD_POSTS_REQUEST,
+      });
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+    }
 );
 
 export default Home;

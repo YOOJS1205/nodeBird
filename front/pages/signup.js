@@ -3,6 +3,9 @@ import Head from "next/head";
 import Router from "next/router";
 import { Form, Input, Checkbox, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import wrapper from "../store/configureStore";
+import axios from "axios";
+import { END } from "redux-saga";
 import useInput from "../hooks/useInput";
 import styled from "styled-components";
 
@@ -137,5 +140,21 @@ const Signup = () => {
     </AppLayout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req }) => {
+      const cookie = req ? req.headers.cookie : "";
+      axios.defaults.headers.Cookie = "";
+      if (req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+      }
+      store.dispatch({
+        type: LOAD_MY_INFO_REQUEST,
+      });
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+    }
+);
 
 export default Signup;
