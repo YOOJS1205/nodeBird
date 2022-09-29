@@ -148,7 +148,7 @@ function* loadUserPosts(action) {
 }
 
 function loadHashtagPostsAPI(data, lastId) {
-  return axios.get(`/posts/${data}?lastId=${lastId || 0}`);
+  return axios.get(`/posts/${encodeURIComponent(data)}?lastId=${lastId || 0}`);
 }
 
 function* loadHashtagPosts(action) {
