@@ -1,12 +1,13 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useCallback } from "react";
 import Link from "next/link";
+import Router, { useRouter } from "next/router";
 import { Menu, Input, Row, Col } from "antd";
 import styled, { createGlobalStyle } from "styled-components";
 
 import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
 import { useSelector } from "react-redux";
+import useInput from "../hooks/useInput";
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
@@ -29,29 +30,48 @@ const Global = createGlobalStyle`
 
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
+  const [searchInput, onChangeSearchInput] = useInput("");
+  const router = useRouter();
+
+  const onSearch = useCallback(() => {
+    Router.push(`/hashtag/${searchInput}`);
+  }, [searchInput]);
+
   return (
     <div>
-      <Global />
-      <Menu mode="horizontal">
-        <Menu.Item>
-          <Link href="/">
-            <a>노드버드</a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/profile">
-            <a>프로필</a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item>
-          <SearchInput enterButton />
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/signup">
-            <a>회원가입</a>
-          </Link>
-        </Menu.Item>
-      </Menu>
+      <Menu
+        mode="horizontal"
+        selectedKeys={[router.pathname]}
+        items={[
+          {
+            label: (
+              <Link href="/">
+                <a>노드버드</a>
+              </Link>
+            ),
+            key: "/",
+          },
+          {
+            label: (
+              <Link href="/profile">
+                <a>프로필</a>
+              </Link>
+            ),
+            key: "/profile",
+          },
+          {
+            label: (
+              <SearchInput
+                enterButton
+                value={searchInput}
+                onChange={onChangeSearchInput}
+                onSearch={onSearch}
+              />
+            ),
+            key: "/search",
+          },
+        ]}
+      />
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {me ? <UserProfile /> : <LoginForm />}
@@ -61,19 +81,16 @@ const AppLayout = ({ children }) => {
         </Col>
         <Col xs={24} md={6}>
           <a
-            href="https://www.github.com/YOOJS1205"
-            rel="noreferrer noopner"
+            href="https://www.zerocho.com"
             target="_blank"
+            rel="noreferrer noopener"
           >
-            Github
+            Made by ZeroCho
           </a>
         </Col>
       </Row>
     </div>
   );
-};
-AppLayout.propTypes = {
-  children: PropTypes.node.isRequired,
 };
 
 export default AppLayout;
